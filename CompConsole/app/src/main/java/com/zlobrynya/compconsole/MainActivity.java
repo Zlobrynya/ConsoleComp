@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 out.writeInt(256);*/
 
                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
+                out.print("ID");
                 out.print(pseudoID);
                 out.close();
             }
