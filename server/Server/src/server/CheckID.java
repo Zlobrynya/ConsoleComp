@@ -26,9 +26,7 @@ public class CheckID {
         //String path = Paths.get("").toAbsolutePath().toString()+"Id";
         file = new File("Id");
         try {
-            if(file.createNewFile()){
-                System.out.println("file.txt файл создан в корневой директории проекта");
-            }else System.out.println("file.txt файл уже существует в корневой директории проекта");
+            file.createNewFile();
         } catch (IOException ex) {
             Logger.getLogger(CheckID.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,12 +40,17 @@ public class CheckID {
             //Считывание с файла строки
             Stream<String> lines = Files.lines(file.toPath());
             if (lines.count() > 0){
+                //Создаем заново stream, из за того, что он может создаваться только один раз
+                lines = Files.lines(file.toPath());
                 //Проверяем строки на соответвие hash коду id.
-                if (lines.filter(hashCodeId::equals).count() > 0){
+                String buf = lines.filter(hashCodeId::equals).findAny().orElse("");
+                if (!buf.isEmpty()){
                     check = true;
-                }else{
+                } else {
                     return connectionRequest(id);
                 }
+            }else{
+                return connectionRequest(id);
             }
             lines.close();
         } catch (IOException ex) {

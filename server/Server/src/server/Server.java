@@ -27,22 +27,19 @@ public class Server {
         try {
             ServerSocket ss = new ServerSocket(port); // создаем сокет сервера и привязываем его к вышеуказанному порту
             System.out.println("Waiting for a client...");
-            Socket socket = ss.accept();
-            InputData inputData = new InputData(socket);
-
-            while(!inputData.getbExit()){
-                 // заставляем сервер ждать подключений и выводим сообщение когда кто-то связался с сервером
-                System.out.println("Got a client :) ... Finally, someone saw me through all the cover!");
-                System.out.println();
+            try (Socket socket = ss.accept()) {
+                IOData inputData = new IOData(socket);
                 
-                inputData.readData(socket);
-                
-                
-                System.out.println("Client disconect");
-                System.out.println();
+                while(inputData.getbRun()){
+                    // заставляем сервер ждать подключений и выводим сообщение когда кто-то связался с сервером
+                    //System.out.println("Got a client :) ... Finally, someone saw me through all the cover!");
+                    //System.out.println();
+                    inputData.run();
+                }
+                inputData.close();
             }
-            socket.close();
-            
+            System.out.println("Client disconect");
+            System.out.println();
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
