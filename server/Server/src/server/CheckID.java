@@ -70,7 +70,7 @@ public class CheckID {
         String confirmation = in.next();
         if (confirmation.equals("y")){
             System.out.println("Подключение разрешено.");
-            writeFile(id);
+            writeFile(id+"\n");
             return true;
         }else{
             System.out.println("Подключение запрещено.");

@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -12,33 +13,78 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class MainActivity extends AppCompatActivity {
+    //Очередь для передачи сообщений в поток.
+    private BlockingQueue blockingQueue;
+    private SenderThread senderThread;
+    private int i;
 
-    private String serIpAddress = "192.168.0.50";
-    private int port = 6666;
-    private String pseudoID;
+    public static final String ALLOWED = "allowed";
+    public static final String DEBUG = "deb";
+    public static final String DISCONECT = "disc";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        pseudoID = " " + Build.BOARD.length()%10 + Build.BRAND.length()%10 +
-                Build.CPU_ABI.length()%10 + Build.DEVICE.length()%10 +
-                Build.DISPLAY.length()%10 + Build.HOST.length()%10 +
-                Build.ID.length()%10 + Build.MANUFACTURER.length()%10 +
-                Build.MODEL.length()%10 + Build.PRODUCT.length()%10 +
-                Build.TAGS.length()%10 + Build.TYPE.length()%10 +
-                Build.USER.length()%10;
+        String pseudoID = " " + Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+                Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+                Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+                Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+                Build.USER.length() % 10;
 
         Log.i("Build", String.valueOf(pseudoID));
 
+        blockingQueue = new ArrayBlockingQueue(100);
+        try {
+            blockingQueue.put(DEBUG+","+"GG0");
+            blockingQueue.put(DEBUG+","+"GG1");
+            blockingQueue.put(DEBUG+","+"GG2");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_main);
-        SenderThread senderThread = new SenderThread();
+        String serIpAddress = "192.168.0.50";
+        int port = 6666;
+        senderThread = new SenderThread(pseudoID, serIpAddress, port,blockingQueue);
         senderThread.execute();
+
+        i = 0;
+       /* SenderThread senderThread = new SenderThread();
+        senderThread.execute();*/
     }
 
+    public void clickButton(View view) {
+        i++;
+        try {
+            blockingQueue.put(DEBUG+","+String.valueOf(i));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    protected void onDestroy() {
+        try {
+            blockingQueue.put(DISCONECT+",");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        senderThread.cancel(false);
+        super.onDestroy();
+    }
 
+    /*
     private class SenderThread extends AsyncTask<Void, Void, Void>
     {
         private Socket socket;
@@ -124,5 +170,5 @@ public class MainActivity extends AppCompatActivity {
             }
             super.onPostExecute(result);
         }
-    }
+    }*/
 }

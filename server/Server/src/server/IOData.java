@@ -105,7 +105,7 @@ public class IOData {
                 send = DISCONECT;
             }    
         }else if (act.contains(DISCONECT)){
-            bRun = true;
+            bRun = false;
         }else if (act.contains(DEBUG)){
             System.out.println(DEBUG + " " + data);
         }
