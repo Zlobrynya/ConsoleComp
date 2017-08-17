@@ -63,6 +63,8 @@ public class IOData {
             readData();
             sendData(send);
             send = "";
+            if (socket.isClosed())
+                bRun = false;
         }
     }
     
@@ -73,8 +75,8 @@ public class IOData {
                 //System.out.println(input);
                 String act = input.split(",")[0];
                 String data = input.split(",")[1];
+                System.out.println("DEBUG:"+act + " " + data);
                 chooseAct(act,data);
-                //System.out.println(act + " " + data);
             }
         } catch (IOException ex) {
             Logger.getLogger(IOData.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,9 +105,7 @@ public class IOData {
                 send = ALLOWED;
             }else {
                 send = DISCONECT;
-            }    
-        }else if (act.contains(DISCONECT)){
-            bRun = false;
+            }
         }else if (act.contains(DEBUG)){
             System.out.println(DEBUG + " " + data);
         }
