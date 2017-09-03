@@ -57,7 +57,7 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
             };*/
 
             bStop = false;
-            bSendData = false;
+            bSendData = true;
             if (socket == null){
                 createSoket();
             }
@@ -65,7 +65,7 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
             out = new DataOutputStream(socket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            out.writeBytes("Id,"+pseudoID+"\n");
+            out.writeBytes("id,"+pseudoID+"\n");
             dataExchange();
         }
         catch (Exception ex)
@@ -85,11 +85,12 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
                     if (data != null)
                         out.writeBytes(data+"\n");
                 }
+                //Log.i("DEBUUG","---");
                 //Проверка ответ серва
                 if (in.ready()){
                     String str = in.readLine();
-                    Log.i("Str",str);
-                    if (str.contains(MainActivity.DEBUG))
+                    Log.i("DEBUUG",str);
+                    if (str.contains(MainActivity.DISC))
                         bStop = true;
                     else if (str.contains(MainActivity.ALLOWED))
                         bSendData = true;

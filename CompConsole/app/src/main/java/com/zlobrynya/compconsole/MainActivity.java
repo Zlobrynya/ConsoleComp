@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String ALLOWED = "allowed";
     public static final String DEBUG = "deb";
     public static final String VOLUME = "volume";
+    public static final String DISC = "disc";
+
 
 
     @Override
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         String serIpAddress = "192.168.0.50";
-        int port = 6666;
+        int port = 13;
         senderThread = new SenderThread(pseudoID, serIpAddress, port,blockingQueue);
         senderThread.execute();
 
