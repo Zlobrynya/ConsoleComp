@@ -9,6 +9,7 @@ Server::Server(boost::asio::io_service & ioserv) : socket(ioserv)
 {
 	bRun = true;
 	bSend = false;
+	controlComp = new ControlComp();
 }
 
 Server::~Server()
@@ -80,6 +81,15 @@ void Server::choiceAction(string choice)
 		cout << splitVec.at(0) << " || " << splitVec.at(1) << endl;
 	}
 	else if (splitVec.at(0) ==  VOLUME) {
-		cout << splitVec.at(0) << " || " << splitVec.at(1) << endl;
+		//cout << splitVec.at(0) << " || " << splitVec.at(1) << endl;
+		if (splitVec.at(1) == "+") {
+			controlComp->changeVolume(0.05);
+		}
+		else if (splitVec.at(1) == "-") {
+			controlComp->changeVolume(-0.05);
+		}
+		else {
+			controlComp->muteVolume();
+		}
 	}
 }

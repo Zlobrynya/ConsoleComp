@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
+#include "ControlComp.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ private:
 	bool bRun;
 	bool bSend;
 	string sSend;
+	ControlComp *controlComp;
 
 	void read();
 	void write();

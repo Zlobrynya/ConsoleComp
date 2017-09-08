@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CheckID.h" />
+    <ClInclude Include="ControlComp.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="CheckID.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
+    <ClCompile Include="ControlComp.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
