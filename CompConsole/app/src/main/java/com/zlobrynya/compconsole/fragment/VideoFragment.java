@@ -50,6 +50,10 @@ public class VideoFragment extends Fragment {
         Button volumeUp = (Button) v.findViewById(R.id.volumeUp);
         Button volumeMute = (Button) v.findViewById(R.id.volumeMute);
         Button volumeDown = (Button) v.findViewById(R.id.volumeDown);
+        Button space = (Button) v.findViewById(R.id.space);
+        Button buttonLeft = (Button) v.findViewById(R.id.buttonLeft);
+        Button buttonRigth = (Button) v.findViewById(R.id.buttonRight);
+
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -76,10 +80,34 @@ public class VideoFragment extends Fragment {
                             e.printStackTrace();
                         }
                         break;
+                    case R.id.space:
+                        try {
+                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_SPACE_CODE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case R.id.buttonRight:
+                        try {
+                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_RIGHT_CODE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case R.id.buttonLeft:
+                        try {
+                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_LEFT_CODE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
             }
         };
 
+        buttonRigth.setOnClickListener(onClickListener);
+        buttonLeft.setOnClickListener(onClickListener);
+        space.setOnClickListener(onClickListener);
         volumeDown.setOnClickListener(onClickListener);
         volumeMute.setOnClickListener(onClickListener);
         volumeUp.setOnClickListener(onClickListener);

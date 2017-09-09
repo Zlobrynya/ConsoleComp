@@ -92,4 +92,7 @@ void Server::choiceAction(string choice)
 			controlComp->muteVolume();
 		}
 	}
+	else if (splitVec.at(0) == KEY) {
+		controlComp->keyEmulation(splitVec.at(1));
+	}
 }

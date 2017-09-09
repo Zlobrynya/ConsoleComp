@@ -11,6 +11,8 @@ static const string ALLOWED = "allowed";
 static const string VOLUME = "volume";
 static const string DISCONNECT = "discon";
 static const string ID = "id";
+static const string KEY = "key";
+
 
 class Server
 {

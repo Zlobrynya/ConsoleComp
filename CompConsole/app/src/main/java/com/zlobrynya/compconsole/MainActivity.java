@@ -33,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEBUG = "deb";
     public static final String VOLUME = "volume";
     public static final String DISC = "disc";
-
+    public static final String KEY = "key";
+    public static final String KEY_SPACE_CODE = "32";
+    public static final String KEY_LEFT_CODE = "37";
+    public static final String KEY_RIGHT_CODE = "39";
 
 
     @Override
