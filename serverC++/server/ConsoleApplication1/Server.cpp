@@ -48,7 +48,7 @@ void Server::read()
 	else if (error)
 		throw boost::system::system_error(error); // Some other error.
 
-	//cout.write(buf.data(), len);
+	cout.write(buf.data(), len);
 	std::string data(buf.begin(), buf.begin()+len-1); 
 	choiceAction(data);
 }
@@ -80,19 +80,10 @@ void Server::choiceAction(string choice)
 	else if (splitVec.at(0) ==  DEBUG) {
 		cout << splitVec.at(0) << " || " << splitVec.at(1) << endl;
 	}
-	else if (splitVec.at(0) ==  VOLUME) {
-		//cout << splitVec.at(0) << " || " << splitVec.at(1) << endl;
-		if (splitVec.at(1) == "+") {
-			controlComp->changeVolume(0.05);
-		}
-		else if (splitVec.at(1) == "-") {
-			controlComp->changeVolume(-0.05);
-		}
-		else {
-			controlComp->muteVolume();
-		}
-	}
 	else if (splitVec.at(0) == KEY) {
 		controlComp->keyEmulation(splitVec.at(1));
+	}
+	else if (splitVec.at(0) == DISCONNECT) {
+		bRun = false;
 	}
 }

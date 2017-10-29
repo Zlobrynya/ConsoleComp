@@ -16,11 +16,13 @@ int main()
 
 	try
 	{
-		// Any program that uses asio need to have at least one io_service object
-		boost::asio::io_service io_service;
-	
-		Server servent(io_service);
-		servent.start();
+		while (true) {
+			// Any program that uses asio need to have at least one io_service object
+			boost::asio::io_service io_service;
+			Server servent(io_service);
+			servent.start();
+			cout << "DISC";
+		}
 	}
 	catch (std::exception& e)
 	{

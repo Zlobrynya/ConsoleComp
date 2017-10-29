@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,6 +29,7 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
 
     private Socket socket;
     private boolean bStop;
+    private boolean bDisk;
     private boolean bSendData;
     private BufferedReader in;
     private DataOutputStream out;
@@ -48,24 +51,11 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
     @Override
     protected Void doInBackground(Void... params) {
         try {
-           /* mHandler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    // process incoming messages here
-                    //Log.e("Thread", "#"+number + ": "+msg.getData().getString("KEY"));
-                }
-            };*/
-
             bStop = false;
             bSendData = true;
-            if (socket == null){
-                createSoket();
-            }
-            // Получаем потоки ввод/вывода
-            out = new DataOutputStream(socket.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            out.writeBytes("id,"+pseudoID+"\n");
+            Log.i("DEBUUG","POST");
+            connect();
             dataExchange();
         }
         catch (Exception ex)
@@ -77,28 +67,66 @@ public class SenderThread extends AsyncTask<Void, Void, Void>{
         return null;
     }
 
+    public void connect(){
+        try {
+            if (socket == null) {
+                    createSoket();
+            }
+            if (socket.isClosed())
+                createSoket();
+            // Получаем потоки ввод/вывода
+            out = new DataOutputStream(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out.writeBytes("Id,"+pseudoID+"\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dataExchange();
+    }
+
+
     private void dataExchange(){
-        while (!bStop){
+        while (true){
             try {
-                if (bSendData){
+                if (!bStop){
+                    if (bSendData){
+                        String data = (String) blockingQueue.poll();
+                        if (data != null){
+                            out.writeBytes(data+"\n");
+                            if (data.contains(MainActivity.DISC+", "))
+                                bStop = true;
+                        }
+                    }
+                    //Log.i("DEBUUG","---");
+                    //Проверка ответ серва
+                    if (in.ready()){
+                        String str = in.readLine();
+                        Log.i("DEBUUG",str);
+                        if (str.contains(MainActivity.ALLOWED)) {
+                            bSendData = true;
+                            EventBus.getDefault().post(str);
+                        }
+                    }
+                    if (bStop){
+                        socket.close();
+                    }
+                }else{
                     String data = (String) blockingQueue.poll();
-                    if (data != null)
-                        out.writeBytes(data+"\n");
+                    if (data != null){
+                        Log.i("Connect",data);
+                        if (data.contains(MainActivity.CONNECT)){
+                            Log.i("Connect","true");
+                            bStop = false;
+                            connect();
+                        }
+                    }
                 }
-                //Log.i("DEBUUG","---");
-                //Проверка ответ серва
-                if (in.ready()){
-                    String str = in.readLine();
-                    Log.i("DEBUUG",str);
-                    if (str.contains(MainActivity.DISC))
-                        bStop = true;
-                    else if (str.contains(MainActivity.ALLOWED))
-                        bSendData = true;
-                }
-                Thread.sleep(100);
+                Thread.sleep(300);
+                Log.i("While", String.valueOf(bStop));
+
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-                bStop = true;
+                break;
             }
         }
     }

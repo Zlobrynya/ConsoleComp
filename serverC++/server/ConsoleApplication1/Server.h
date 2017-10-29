@@ -9,7 +9,7 @@ using namespace std;
 static const string DEBUG = "deb";
 static const string ALLOWED = "allowed";
 static const string VOLUME = "volume";
-static const string DISCONNECT = "discon";
+static const string DISCONNECT = "disc";
 static const string ID = "id";
 static const string KEY = "key";
 

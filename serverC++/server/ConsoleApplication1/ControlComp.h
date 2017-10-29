@@ -13,11 +13,6 @@ class ControlComp
 public:
 	ControlComp();
 	~ControlComp();
-	bool changeVolume(double nVolume);
-	void muteVolume();
 	void keyEmulation(string id);
-
-private:
-	IAudioEndpointVolume* initEndpointVolume(HRESULT hr);
 };
 

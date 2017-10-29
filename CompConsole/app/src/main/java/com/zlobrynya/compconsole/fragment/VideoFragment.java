@@ -1,8 +1,9 @@
 package com.zlobrynya.compconsole.fragment;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,72 +47,90 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_video, null);
-
+        Log.i("LOG","StartVideo");
         Button volumeUp = (Button) v.findViewById(R.id.volumeUp);
         Button volumeMute = (Button) v.findViewById(R.id.volumeMute);
         Button volumeDown = (Button) v.findViewById(R.id.volumeDown);
         Button space = (Button) v.findViewById(R.id.space);
         Button buttonLeft = (Button) v.findViewById(R.id.buttonLeft);
         Button buttonRigth = (Button) v.findViewById(R.id.buttonRight);
-
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.volumeDown:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.VOLUME+",-");
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.volumeMute:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.VOLUME+",0");
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.volumeUp:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.VOLUME+",+");
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.space:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_SPACE_CODE);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.buttonRight:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_RIGHT_CODE);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case R.id.buttonLeft:
-                        try {
-                            MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_LEFT_CODE);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                }
-            }
-        };
+        Button buttonNext = (Button) v.findViewById(R.id.buttonNext);
+        Button buttonPrev = (Button) v.findViewById(R.id.buttonPrev);
 
         buttonRigth.setOnClickListener(onClickListener);
         buttonLeft.setOnClickListener(onClickListener);
+        buttonNext.setOnClickListener(onClickListener);
+        buttonPrev.setOnClickListener(onClickListener);
         space.setOnClickListener(onClickListener);
         volumeDown.setOnClickListener(onClickListener);
         volumeMute.setOnClickListener(onClickListener);
         volumeUp.setOnClickListener(onClickListener);
+
         return v;
     }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.volumeDown:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_VOLUME_DOWN_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.volumeMute:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_VOLUME_MUTE_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.volumeUp:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_VOLUME_UP_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.space:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_PAUSE_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.buttonRight:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_RIGHT_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.buttonLeft:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_LEFT_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.buttonPrev:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_MEDIA_PREV_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.buttonNext:
+                    try {
+                        MainActivity.blockingQueue.put(MainActivity.KEY+","+MainActivity.KEY_MEDIA_NEXT_CODE);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+    };
 
 }
